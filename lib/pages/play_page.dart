@@ -8,13 +8,26 @@ class PlayPage extends StatefulWidget {
 class _PlayPageState extends State<PlayPage> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height,
-      child: Center(
-        child: Container(
-          color: Colors.red,
-            child: Text('play')
+    return Scaffold(
+      body: Container(
+        decoration: new BoxDecoration(color: Colors.black),
+        child: Center(
+          child: FlatButton(
+            child: Text(
+              'Play',
+              style: TextStyle(color: Colors.white),
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                new MaterialPageRoute<Null>(
+                  settings: const RouteSettings(name: "/play"),
+                  builder: (BuildContext context) => PlayPage(),
+                  fullscreenDialog: true, // ダイアログで表示するかどうか
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
