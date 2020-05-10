@@ -11,15 +11,16 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       initialRoute: '/start',
-      routes: <String, WidgetBuilder> {
+      routes: <String, WidgetBuilder>{
         Constants.startRoute: (BuildContext context) => StartPage(),
         Constants.playRoute: (BuildContext context) => PlayPage(),
       },
       title: 'Numbers',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+      theme: new ThemeData(
+        brightness: Brightness.dark,
+        primaryColor: Colors.lightBlue[800],
+        accentColor: Colors.cyan[600],
       ),
     );
   }
 }
-
