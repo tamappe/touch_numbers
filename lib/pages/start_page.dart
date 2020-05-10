@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:twentyfive/pages/play_page.dart';
+import 'package:twentyfive/pages/start_count_page.dart';
 import 'package:twentyfive/utils/constants.dart';
 
 class StartPage extends StatefulWidget {
@@ -23,8 +24,8 @@ class _StartPageState extends State<StartPage> {
               Navigator.push(
                 context,
                 new MaterialPageRoute<Null>(
-                  settings: const RouteSettings(name: Constants.playRoute),
-                  builder: (BuildContext context) => PlayPage(),
+                  settings: const RouteSettings(name: Constants.startCountRoute),
+                  builder: (BuildContext context) => StartCountPage(),
                   fullscreenDialog: true, // ダイアログで表示するかどうか
                 ),
               );
