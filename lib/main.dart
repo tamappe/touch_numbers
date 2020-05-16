@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/start',
+      initialRoute: Constants.startRoute,
       routes: <String, WidgetBuilder>{
         Constants.startRoute: (BuildContext context) => StartPage(),
         Constants.playRoute: (BuildContext context) => PlayPage(),

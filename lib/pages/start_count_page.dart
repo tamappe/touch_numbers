@@ -9,23 +9,23 @@ class StartCountPage extends StatefulWidget {
 }
 
 class _StartCountPageState extends State<StartCountPage> with SingleTickerProviderStateMixin {
-  AnimationController progressController;
-  Animation animation;
+  AnimationController _progressController;
+  Animation _animation;
 
-  double millSeconds = 3;
+  double _millSeconds = 3;
 
   @override
   void initState() {
     super.initState();
-    progressController = AnimationController(vsync: this, duration: Duration(milliseconds: 3000));
-    animation = Tween<double>(begin: 0, end: 300).animate(progressController)
-      ..addListener(() {
-        setState(() {
-            double localSecond = 300 - animation.value;
-            millSeconds = 1 + localSecond / 100;
-        });
-      })
-    ..addStatusListener((status) {
+    _progressController = AnimationController(vsync: this, duration: Duration(seconds: 3));
+    _animation = Tween<double>(begin: 0, end: 300).animate(_progressController);
+    _animation.addListener(() {
+      setState(() {
+        double localSecond = 300 - _animation.value;
+        _millSeconds = 1 + localSecond / 100;
+      });
+    });
+    _animation.addStatusListener((status) {
       if (status == AnimationStatus.completed)
         Navigator.push(
           context,
@@ -35,7 +35,7 @@ class _StartCountPageState extends State<StartCountPage> with SingleTickerProvid
           ),
         );
     });
-    progressController.forward();
+    _progressController.forward();
   }
 
   @override
@@ -43,14 +43,24 @@ class _StartCountPageState extends State<StartCountPage> with SingleTickerProvid
     return Scaffold(
       body: Center(
         child: CustomPaint(
-          foregroundPainter: CircleProgress(animation.value),
+          foregroundPainter: CircleProgress(_animation.value),
           child: Container(
-            width: 200,
-            height: 200,
-            child: Center(child: Text('${millSeconds.toInt()}')),
+            width: Constants.circleSize,
+            height: Constants.circleSize,
+            child: Center(
+                child: Text(
+              '${_millSeconds.toInt()}',
+              style: TextStyle(fontSize: Constants.circleFontSize, fontWeight: FontWeight.bold),
+            )),
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _progressController.dispose();
   }
 }
