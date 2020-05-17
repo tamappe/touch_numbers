@@ -17,6 +17,7 @@ class MyApp extends StatelessWidget {
       },
       title: 'Numbers',
       theme: new ThemeData(
+        fontFamily: 'Arial',
         brightness: Brightness.dark,
         primaryColor: Colors.lightBlue[800],
         accentColor: Colors.cyan[600],
