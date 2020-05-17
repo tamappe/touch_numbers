@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:twentyfive/pages/play_page.dart';
+import 'package:twentyfive/pages/game_play_page.dart';
 import 'package:twentyfive/utils/constants.dart';
 import 'package:twentyfive/widgets/circle_progress.dart';
 
@@ -27,11 +27,10 @@ class _StartCountPageState extends State<StartCountPage> with SingleTickerProvid
     });
     _animation.addStatusListener((status) {
       if (status == AnimationStatus.completed)
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
-          new MaterialPageRoute<Null>(
-            settings: const RouteSettings(name: Constants.playRoute),
-            builder: (BuildContext context) => PlayPage(),
+          PageRouteBuilder(
+            pageBuilder: (context, animation1, animation2) => GamePlayPage(),
           ),
         );
     });
