@@ -7,7 +7,7 @@ class GamePlayPage extends StatefulWidget {
 }
 
 class _GamePlayPageState extends State<GamePlayPage> {
-  void _tappedNumberButton() {}
+  void _onPressedNumberButton() {}
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
                     physics: const NeverScrollableScrollPhysics(),
                     crossAxisCount: 5,
                     children: List.generate(25, (index) {
-                      return NumberButton(index + 1, _tappedNumberButton);
+                      return NumberButton(index + 1, _onPressedNumberButton);
                     })),
               )
             ],
