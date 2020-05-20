@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:twentyfive/pages/clear_page.dart';
 import 'package:twentyfive/utils/constants.dart';
 
 class GamePlayPage extends StatefulWidget {
@@ -7,7 +8,24 @@ class GamePlayPage extends StatefulWidget {
 }
 
 class _GamePlayPageState extends State<GamePlayPage> {
+  int currentNumber = 1;
+
   void _onPressedNumberButton() {}
+
+  void _updateCurrentNumber() {
+    if (currentNumber >= 25) {
+      Navigator.push(
+        context,
+        new MaterialPageRoute<Null>(
+          settings: RouteSettings(name: Constants.clearRoute),
+          builder: (BuildContext context) => ClearPage(),
+        ),
+      );
+    }
+    setState(() {
+      currentNumber += 1;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +38,35 @@ class _GamePlayPageState extends State<GamePlayPage> {
             children: <Widget>[
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[Text('a'), Text('b')],
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(left: 20.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(5),
+                      child: Container(
+                          width: 140.0,
+                          height: 50.0,
+                          color: Colors.white,
+                          child: Center(
+                            child: Text(
+                              '$currentNumber',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, color: Colors.black, fontSize: 30),
+                            ),
+                          )),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.only(right: 20),
+                    child: Center(
+                        child: Text(
+                      'Timer: 3.57',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    )),
+                  )
+                ],
               ),
               SizedBox(
                 height: 48.0,
@@ -33,7 +79,11 @@ class _GamePlayPageState extends State<GamePlayPage> {
                     physics: const NeverScrollableScrollPhysics(),
                     crossAxisCount: 5,
                     children: List.generate(25, (index) {
-                      return NumberButton(index + 1, _onPressedNumberButton);
+                      return NumberButton(index + 1, () {
+                        if (index + 1 == currentNumber) {
+                          _updateCurrentNumber();
+                        }
+                      });
                     })),
               )
             ],

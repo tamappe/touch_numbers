@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:twentyfive/pages/clear_page.dart';
 import 'package:twentyfive/pages/game_play_page.dart';
 import 'package:twentyfive/pages/start_page.dart';
 import 'package:twentyfive/utils/constants.dart';
@@ -14,6 +15,7 @@ class MyApp extends StatelessWidget {
       routes: <String, WidgetBuilder>{
         Constants.startRoute: (BuildContext context) => StartPage(),
         Constants.playRoute: (BuildContext context) => GamePlayPage(),
+        Constants.clearRoute: (BuildContext context) => ClearPage(),
       },
       title: 'Numbers',
       theme: new ThemeData(
