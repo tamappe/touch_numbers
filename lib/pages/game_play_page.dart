@@ -8,12 +8,10 @@ class GamePlayPage extends StatefulWidget {
 }
 
 class _GamePlayPageState extends State<GamePlayPage> {
-  int currentNumber = 1;
-
-  void _onPressedNumberButton() {}
+  int _currentNumber = 1;
 
   void _updateCurrentNumber() {
-    if (currentNumber >= 25) {
+    if (_currentNumber >= 25) {
       Navigator.push(
         context,
         new MaterialPageRoute<Null>(
@@ -23,7 +21,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
       );
     }
     setState(() {
-      currentNumber += 1;
+      _currentNumber += 1;
     });
   }
 
@@ -50,10 +48,13 @@ class _GamePlayPageState extends State<GamePlayPage> {
                           color: Colors.white,
                           child: Center(
                             child: Text(
-                              '$currentNumber',
+                              '$_currentNumber',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold, color: Colors.black, fontSize: 30),
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                  fontSize: 30
+                              ),
                             ),
                           )),
                     ),
@@ -63,7 +64,10 @@ class _GamePlayPageState extends State<GamePlayPage> {
                     child: Center(
                         child: Text(
                       'Timer: 3.57',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold
+                      ),
                     )),
                   )
                 ],
@@ -80,7 +84,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
                     crossAxisCount: 5,
                     children: List.generate(25, (index) {
                       return NumberButton(index + 1, () {
-                        if (index + 1 == currentNumber) {
+                        if (index + 1 == _currentNumber) {
                           _updateCurrentNumber();
                         }
                       });
@@ -95,10 +99,10 @@ class _GamePlayPageState extends State<GamePlayPage> {
 }
 
 class NumberButton extends StatelessWidget {
-  final int number;
-  final Function onPressed;
+  final int _number;
+  final Function _onPressed;
 
-  NumberButton(this.number, this.onPressed);
+  NumberButton(this._number, this._onPressed);
 
   @override
   Widget build(BuildContext context) {
@@ -112,13 +116,13 @@ class NumberButton extends StatelessWidget {
       ),
       child: FlatButton(
           child: Text(
-            '$number',
+            '$_number',
             style: TextStyle(
               fontSize: 20.0,
               fontWeight: FontWeight.bold,
             ),
           ),
-          onPressed: onPressed),
+          onPressed: _onPressed),
     );
   }
 }
