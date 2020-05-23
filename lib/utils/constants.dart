@@ -12,4 +12,5 @@ class Constants {
 
   static Color orangeColor = HexColor('#FA6400');
   static Color borderGrayColor = HexColor('#555555');
+  static Color blackOrangeColor = HexColor('#2e1503');
 }

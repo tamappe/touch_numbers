@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:twentyfive/pages/clear_page.dart';
 import 'package:twentyfive/utils/constants.dart';
+import 'package:flip_card/flip_card.dart';
 
 class GamePlayPage extends StatefulWidget {
   @override
@@ -51,10 +52,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
                               '$_currentNumber',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black,
-                                  fontSize: 30
-                              ),
+                                  fontWeight: FontWeight.bold, color: Colors.black, fontSize: 30),
                             ),
                           )),
                     ),
@@ -64,10 +62,7 @@ class _GamePlayPageState extends State<GamePlayPage> {
                     child: Center(
                         child: Text(
                       'Timer: 3.57',
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold
-                      ),
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     )),
                   )
                 ],
@@ -83,11 +78,12 @@ class _GamePlayPageState extends State<GamePlayPage> {
                     physics: const NeverScrollableScrollPhysics(),
                     crossAxisCount: 5,
                     children: List.generate(25, (index) {
+                      final isCorrect = index + 1 == _currentNumber;
                       return NumberButton(index + 1, () {
-                        if (index + 1 == _currentNumber) {
+                        if (isCorrect) {
                           _updateCurrentNumber();
                         }
-                      });
+                      }, isCorrect);
                     })),
               )
             ],
@@ -101,11 +97,24 @@ class _GamePlayPageState extends State<GamePlayPage> {
 class NumberButton extends StatelessWidget {
   final int _number;
   final Function _onPressed;
+  final bool _isOnTouch;
 
-  NumberButton(this._number, this._onPressed);
+  NumberButton(this._number, this._onPressed, this._isOnTouch);
 
   @override
   Widget build(BuildContext context) {
+    return FlipCard(
+      direction: FlipDirection.HORIZONTAL,
+      speed: 500,
+      // タップイベント
+      onFlip: _onPressed,
+      flipOnTouch: _isOnTouch,
+      front: _frontNumberButton(),
+      back: _backNumberButton(),
+    );
+  }
+
+  Widget _frontNumberButton() {
     return Container(
       width: 60,
       height: 60,
@@ -114,15 +123,49 @@ class NumberButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         color: Constants.orangeColor,
       ),
-      child: FlatButton(
-          child: Text(
-            '$_number',
-            style: TextStyle(
-              fontSize: 20.0,
-              fontWeight: FontWeight.bold,
+      child: Center(
+        child: Text(
+          '$_number',
+          style: TextStyle(
+            fontSize: 30.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _backNumberButton() {
+    return Stack(
+      children: <Widget>[
+        Container(
+          width: 60,
+          height: 60,
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.white, width: 2.0),
+            borderRadius: BorderRadius.circular(10),
+            color: Constants.orangeColor,
+          ),
+          child: Center(
+            child: Text(
+              '$_number',
+              style: TextStyle(
+                fontSize: 30.0,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-          onPressed: _onPressed),
+        ),
+        Opacity(
+            opacity: .8,
+            child: Container(
+                width: 60,
+                height: 60,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.black,
+                )))
+      ],
     );
   }
 }
