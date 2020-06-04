@@ -1,18 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:twentyfive/models/counter_model.dart';
 import 'package:twentyfive/pages/clear_page.dart';
 import 'package:twentyfive/utils/constants.dart';
 import 'package:flip_card/flip_card.dart';
 
-class GamePlayPage extends StatefulWidget {
+class CurrentNumberText extends StatelessWidget {
   @override
-  _GamePlayPageState createState() => _GamePlayPageState();
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(5),
+      child: Container(
+          width: 140.0,
+          height: 50.0,
+          color: Colors.white,
+          child: Center(
+            child: Text(
+              /// Provider で model から直接、値を受け取れる
+              '${Provider.of<CounterModel>(context).currentNumber}',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.black, fontSize: 30),
+            ),
+          )
+      ),
+    );
+  }
 }
 
-class _GamePlayPageState extends State<GamePlayPage> {
-  int _currentNumber = 1;
+class GamePlayPage extends StatelessWidget {
 
-  void _updateCurrentNumber() {
-    if (_currentNumber >= 25) {
+  void _updateCurrentNumber(BuildContext context, CounterModel provider) {
+    if (provider.currentNumber >= 25) {
       Navigator.push(
         context,
         new MaterialPageRoute<Null>(
@@ -21,72 +40,61 @@ class _GamePlayPageState extends State<GamePlayPage> {
         ),
       );
     }
-    setState(() {
-      _currentNumber += 1;
-    });
+    provider.updateCurrentNumber();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
+    return ChangeNotifierProvider<CounterModel>(
+      create: (context) => CounterModel(),
+      child: Consumer<CounterModel>(
+        builder: (context, provider, child) => Scaffold(
+          body: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(left: 20.0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(5),
-                      child: Container(
-                          width: 140.0,
-                          height: 50.0,
-                          color: Colors.white,
-                          child: Center(
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(left: 20.0),
+                        child: CurrentNumberText(),
+                      ),
+                      Container(
+                        padding: EdgeInsets.only(right: 20),
+                        child: Center(
                             child: Text(
-                              '$_currentNumber',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, color: Colors.black, fontSize: 30),
-                            ),
-                          )),
-                    ),
+                              'Timer: 3.57',
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            )),
+                      )
+                    ],
                   ),
-                  Container(
-                    padding: EdgeInsets.only(right: 20),
-                    child: Center(
-                        child: Text(
-                      'Timer: 3.57',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    )),
+                  SizedBox(
+                    height: 48.0,
+                  ),
+                  SizedBox(
+                    height: 400.0,
+                    child: GridView.count(
+                        mainAxisSpacing: 8,
+                        crossAxisSpacing: 8,
+                        physics: const NeverScrollableScrollPhysics(),
+                        crossAxisCount: 5,
+                        children: List.generate(25, (index) {
+                          final isCorrect = index + 1 == provider.currentNumber;
+                          return NumberButton(
+                            number: index + 1,
+                            onPressed: () => _updateCurrentNumber(context, provider),
+                            isOnTouch: isCorrect,
+                          );
+                        })),
                   )
                 ],
               ),
-              SizedBox(
-                height: 48.0,
-              ),
-              SizedBox(
-                height: 400.0,
-                child: GridView.count(
-                    mainAxisSpacing: 8,
-                    crossAxisSpacing: 8,
-                    physics: const NeverScrollableScrollPhysics(),
-                    crossAxisCount: 5,
-                    children: List.generate(25, (index) {
-                      final isCorrect = index + 1 == _currentNumber;
-                      return NumberButton(index + 1, () {
-                        if (isCorrect) {
-                          _updateCurrentNumber();
-                        }
-                      }, isCorrect);
-                    })),
-              )
-            ],
+            ),
           ),
         ),
       ),
@@ -95,11 +103,11 @@ class _GamePlayPageState extends State<GamePlayPage> {
 }
 
 class NumberButton extends StatelessWidget {
-  final int _number;
-  final Function _onPressed;
-  final bool _isOnTouch;
+  final int number;
+  final Function onPressed;
+  final bool isOnTouch;
 
-  NumberButton(this._number, this._onPressed, this._isOnTouch);
+  NumberButton({@required this.number, @required this.onPressed, @required this.isOnTouch});
 
   @override
   Widget build(BuildContext context) {
@@ -107,8 +115,8 @@ class NumberButton extends StatelessWidget {
       direction: FlipDirection.HORIZONTAL,
       speed: 500,
       // タップイベント
-      onFlip: _onPressed,
-      flipOnTouch: _isOnTouch,
+      onFlip: onPressed,
+      flipOnTouch: isOnTouch,
       front: _frontNumberButton(),
       back: _backNumberButton(),
     );
@@ -125,7 +133,7 @@ class NumberButton extends StatelessWidget {
       ),
       child: Center(
         child: Text(
-          '$_number',
+          '$number',
           style: TextStyle(
             fontSize: 30.0,
             fontWeight: FontWeight.bold,
@@ -148,7 +156,7 @@ class NumberButton extends StatelessWidget {
           ),
           child: Center(
             child: Text(
-              '$_number',
+              '$number',
               style: TextStyle(
                 fontSize: 30.0,
                 fontWeight: FontWeight.bold,
