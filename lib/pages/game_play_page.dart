@@ -1,34 +1,26 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:twentyfive/models/counter_model.dart';
 import 'package:twentyfive/pages/clear_page.dart';
 import 'package:twentyfive/utils/constants.dart';
-import 'package:flip_card/flip_card.dart';
-
-class CurrentNumberText extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(5),
-      child: Container(
-          width: 140.0,
-          height: 50.0,
-          color: Colors.white,
-          child: Center(
-            child: Text(
-              /// Provider で model から直接、値を受け取れる
-              '${Provider.of<CounterModel>(context).currentNumber}',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold, color: Colors.black, fontSize: 30),
-            ),
-          )
-      ),
-    );
-  }
-}
+import 'package:twentyfive/widgets/current_number_text.dart';
+import 'package:twentyfive/widgets/number_button.dart';
 
 class GamePlayPage extends StatelessWidget {
+
+  /// See: https://stackoverflow.com/questions/13554129/list-shuffle-in-dart
+  List shuffle(List items) {
+    var random = new Random();
+    for (var i = items.length - 1; i > 0; i--) {
+      var n = random.nextInt(i + 1);
+      var temp = items[i];
+      items[i] = items[n];
+      items[n] = temp;
+    }
+    return items;
+  }
 
   void _updateCurrentNumber(BuildContext context, CounterModel provider) {
     if (provider.currentNumber >= 25) {
@@ -45,6 +37,9 @@ class GamePlayPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final numberList = List<int>.generate(25, (i) => i + 1);
+    final randomList = shuffle(numberList);
+
     return ChangeNotifierProvider<CounterModel>(
       create: (context) => CounterModel(),
       child: Consumer<CounterModel>(
@@ -83,10 +78,10 @@ class GamePlayPage extends StatelessWidget {
                         crossAxisSpacing: 8,
                         physics: const NeverScrollableScrollPhysics(),
                         crossAxisCount: 5,
-                        children: List.generate(25, (index) {
-                          final isCorrect = index + 1 == provider.currentNumber;
+                        children: List.generate(randomList.length, (index) {
+                          final isCorrect = randomList[index] == provider.currentNumber;
                           return NumberButton(
-                            number: index + 1,
+                            number: randomList[index],
                             onPressed: () => _updateCurrentNumber(context, provider),
                             isOnTouch: isCorrect,
                           );
@@ -98,82 +93,6 @@ class GamePlayPage extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class NumberButton extends StatelessWidget {
-  final int number;
-  final Function onPressed;
-  final bool isOnTouch;
-
-  NumberButton({@required this.number, @required this.onPressed, @required this.isOnTouch});
-
-  @override
-  Widget build(BuildContext context) {
-    return FlipCard(
-      direction: FlipDirection.HORIZONTAL,
-      speed: 500,
-      // タップイベント
-      onFlip: onPressed,
-      flipOnTouch: isOnTouch,
-      front: _frontNumberButton(),
-      back: _backNumberButton(),
-    );
-  }
-
-  Widget _frontNumberButton() {
-    return Container(
-      width: 60,
-      height: 60,
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.white, width: 2.0),
-        borderRadius: BorderRadius.circular(10),
-        color: Constants.orangeColor,
-      ),
-      child: Center(
-        child: Text(
-          '$number',
-          style: TextStyle(
-            fontSize: 30.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _backNumberButton() {
-    return Stack(
-      children: <Widget>[
-        Container(
-          width: 60,
-          height: 60,
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.white, width: 2.0),
-            borderRadius: BorderRadius.circular(10),
-            color: Constants.orangeColor,
-          ),
-          child: Center(
-            child: Text(
-              '$number',
-              style: TextStyle(
-                fontSize: 30.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-        ),
-        Opacity(
-            opacity: .8,
-            child: Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.black,
-                )))
-      ],
     );
   }
 }
