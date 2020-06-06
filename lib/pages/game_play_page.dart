@@ -11,7 +11,7 @@ import 'package:twentyfive/widgets/number_button.dart';
 class GamePlayPage extends StatelessWidget {
 
   /// See: https://stackoverflow.com/questions/13554129/list-shuffle-in-dart
-  List shuffle(List items) {
+  List _shuffle(List items) {
     var random = new Random();
     for (var i = items.length - 1; i > 0; i--) {
       var n = random.nextInt(i + 1);
@@ -37,8 +37,8 @@ class GamePlayPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final numberList = List<int>.generate(25, (i) => i + 1);
-    final randomList = shuffle(numberList);
+    final list = List<int>.generate(25, (i) => i + 1);
+    final randomList = _shuffle(list);
 
     return ChangeNotifierProvider<CounterModel>(
       create: (context) => CounterModel(),
