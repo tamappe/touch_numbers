@@ -7,6 +7,7 @@ import 'package:twentyfive/pages/clear_page.dart';
 import 'package:twentyfive/utils/constants.dart';
 import 'package:twentyfive/widgets/current_number_text.dart';
 import 'package:twentyfive/widgets/number_button.dart';
+import 'package:twentyfive/widgets/timer_text.dart';
 
 class GamePlayPage extends StatelessWidget {
 
@@ -61,10 +62,7 @@ class GamePlayPage extends StatelessWidget {
                       Container(
                         padding: EdgeInsets.only(right: 20),
                         child: Center(
-                            child: Text(
-                              'Timer: 3.57',
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                            )),
+                            child: TimerText()),
                       )
                     ],
                   ),
