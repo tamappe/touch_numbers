@@ -21,8 +21,8 @@ class MyApp extends StatelessWidget {
       theme: new ThemeData(
         fontFamily: 'Arial',
         brightness: Brightness.dark,
-        primaryColor: Colors.lightBlue[800],
-        accentColor: Colors.cyan[600],
+        primaryColor: Colors.black,
+        accentColor: Colors.white,
       ),
     );
   }
