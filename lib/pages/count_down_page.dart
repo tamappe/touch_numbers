@@ -3,12 +3,12 @@ import 'package:twentyfive/pages/game_play_page.dart';
 import 'package:twentyfive/utils/constants.dart';
 import 'package:twentyfive/widgets/circle_progress.dart';
 
-class StartCountPage extends StatefulWidget {
+class CountDownPage extends StatefulWidget {
   @override
-  _StartCountPageState createState() => _StartCountPageState();
+  _CountDownPageState createState() => _CountDownPageState();
 }
 
-class _StartCountPageState extends State<StartCountPage> with SingleTickerProviderStateMixin {
+class _CountDownPageState extends State<CountDownPage> with SingleTickerProviderStateMixin {
   AnimationController _progressController;
   Animation _animation;
 

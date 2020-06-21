@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:twentyfive/pages/start_count_page.dart';
+import 'package:twentyfive/pages/count_down_page.dart';
 import 'package:twentyfive/utils/constants.dart';
 
 class StartPage extends StatefulWidget {
@@ -46,7 +46,7 @@ class _StartPageState extends State<StartPage> {
                     context,
                     new MaterialPageRoute<Null>(
                       settings: const RouteSettings(name: Constants.startCountRoute),
-                      builder: (BuildContext context) => StartCountPage(),
+                      builder: (BuildContext context) => CountDownPage(),
                       fullscreenDialog: true, // ダイアログで表示するかどうか
                     ),
                   );
